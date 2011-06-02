@@ -7,8 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7387A1DF1397954F0038A5CC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7387A1DE1397954F0038A5CC /* Foundation.framework */; };
-		7387A1E21397954F0038A5CC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7387A1E11397954F0038A5CC /* main.m */; };
+		7387A1F01397959A0038A5CC /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7387A1EF1397959A0038A5CC /* AppKit.framework */; };
+		7387A1F6139796F00038A5CC /* Body.m in Sources */ = {isa = PBXBuildFile; fileRef = 7387A1F3139796F00038A5CC /* Body.m */; };
+		7387A1F7139796F00038A5CC /* Light.m in Sources */ = {isa = PBXBuildFile; fileRef = 7387A1F5139796F00038A5CC /* Light.m */; };
+		7387A202139797090038A5CC /* Ray.m in Sources */ = {isa = PBXBuildFile; fileRef = 7387A1F9139797090038A5CC /* Ray.m */; };
+		7387A203139797090038A5CC /* RayColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 7387A1FB139797090038A5CC /* RayColor.m */; };
+		7387A204139797090038A5CC /* Raytrace.m in Sources */ = {isa = PBXBuildFile; fileRef = 7387A1FD139797090038A5CC /* Raytrace.m */; };
+		7387A205139797090038A5CC /* Sphere.m in Sources */ = {isa = PBXBuildFile; fileRef = 7387A1FF139797090038A5CC /* Sphere.m */; };
+		7387A206139797090038A5CC /* Triangle.m in Sources */ = {isa = PBXBuildFile; fileRef = 7387A201139797090038A5CC /* Triangle.m */; };
+		7387A208139797340038A5CC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7387A207139797340038A5CC /* main.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,9 +33,24 @@
 /* Begin PBXFileReference section */
 		7387A1DA1397954F0038A5CC /* Raytracer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Raytracer; sourceTree = BUILT_PRODUCTS_DIR; };
 		7387A1DE1397954F0038A5CC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		7387A1E11397954F0038A5CC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		7387A1E41397954F0038A5CC /* Raytracer-Prefix.pch */ = {isa = PBXFileReference; path = "Raytracer-Prefix.pch"; sourceTree = "<group>"; };
+		7387A1E41397954F0038A5CC /* Raytracer-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Raytracer-Prefix.pch"; sourceTree = "<group>"; };
 		7387A1E51397954F0038A5CC /* Raytracer.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Raytracer.1; sourceTree = "<group>"; };
+		7387A1EF1397959A0038A5CC /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		7387A1F2139796F00038A5CC /* Body.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Body.h; sourceTree = "<group>"; };
+		7387A1F3139796F00038A5CC /* Body.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Body.m; sourceTree = "<group>"; };
+		7387A1F4139796F00038A5CC /* Light.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Light.h; sourceTree = "<group>"; };
+		7387A1F5139796F00038A5CC /* Light.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Light.m; sourceTree = "<group>"; };
+		7387A1F8139797090038A5CC /* Ray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ray.h; sourceTree = "<group>"; };
+		7387A1F9139797090038A5CC /* Ray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Ray.m; sourceTree = "<group>"; };
+		7387A1FA139797090038A5CC /* RayColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RayColor.h; sourceTree = "<group>"; };
+		7387A1FB139797090038A5CC /* RayColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RayColor.m; sourceTree = "<group>"; };
+		7387A1FC139797090038A5CC /* Raytrace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Raytrace.h; sourceTree = "<group>"; };
+		7387A1FD139797090038A5CC /* Raytrace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Raytrace.m; sourceTree = "<group>"; };
+		7387A1FE139797090038A5CC /* Sphere.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sphere.h; sourceTree = "<group>"; };
+		7387A1FF139797090038A5CC /* Sphere.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Sphere.m; sourceTree = "<group>"; };
+		7387A200139797090038A5CC /* Triangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Triangle.h; sourceTree = "<group>"; };
+		7387A201139797090038A5CC /* Triangle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Triangle.m; sourceTree = "<group>"; };
+		7387A207139797340038A5CC /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -36,7 +58,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7387A1DF1397954F0038A5CC /* Foundation.framework in Frameworks */,
+				7387A1F01397959A0038A5CC /* AppKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,6 +85,7 @@
 		7387A1DD1397954F0038A5CC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7387A1EF1397959A0038A5CC /* AppKit.framework */,
 				7387A1DE1397954F0038A5CC /* Foundation.framework */,
 			);
 			name = Frameworks;
@@ -71,7 +94,10 @@
 		7387A1E01397954F0038A5CC /* Raytracer */ = {
 			isa = PBXGroup;
 			children = (
-				7387A1E11397954F0038A5CC /* main.m */,
+				7387A20B13979C3D0038A5CC /* Basic */,
+				7387A20A13979C290038A5CC /* Lights */,
+				7387A20913979C050038A5CC /* Objects */,
+				7387A207139797340038A5CC /* main.m */,
 				7387A1E51397954F0038A5CC /* Raytracer.1 */,
 				7387A1E31397954F0038A5CC /* Supporting Files */,
 			);
@@ -84,6 +110,41 @@
 				7387A1E41397954F0038A5CC /* Raytracer-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		7387A20913979C050038A5CC /* Objects */ = {
+			isa = PBXGroup;
+			children = (
+				7387A1F2139796F00038A5CC /* Body.h */,
+				7387A1F3139796F00038A5CC /* Body.m */,
+				7387A1FE139797090038A5CC /* Sphere.h */,
+				7387A1FF139797090038A5CC /* Sphere.m */,
+				7387A200139797090038A5CC /* Triangle.h */,
+				7387A201139797090038A5CC /* Triangle.m */,
+			);
+			name = Objects;
+			sourceTree = "<group>";
+		};
+		7387A20A13979C290038A5CC /* Lights */ = {
+			isa = PBXGroup;
+			children = (
+				7387A1F4139796F00038A5CC /* Light.h */,
+				7387A1F5139796F00038A5CC /* Light.m */,
+			);
+			name = Lights;
+			sourceTree = "<group>";
+		};
+		7387A20B13979C3D0038A5CC /* Basic */ = {
+			isa = PBXGroup;
+			children = (
+				7387A1F8139797090038A5CC /* Ray.h */,
+				7387A1F9139797090038A5CC /* Ray.m */,
+				7387A1FA139797090038A5CC /* RayColor.h */,
+				7387A1FB139797090038A5CC /* RayColor.m */,
+				7387A1FC139797090038A5CC /* Raytrace.h */,
+				7387A1FD139797090038A5CC /* Raytrace.m */,
+			);
+			name = Basic;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -133,7 +194,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7387A1E21397954F0038A5CC /* main.m in Sources */,
+				7387A1F6139796F00038A5CC /* Body.m in Sources */,
+				7387A1F7139796F00038A5CC /* Light.m in Sources */,
+				7387A202139797090038A5CC /* Ray.m in Sources */,
+				7387A203139797090038A5CC /* RayColor.m in Sources */,
+				7387A204139797090038A5CC /* Raytrace.m in Sources */,
+				7387A205139797090038A5CC /* Sphere.m in Sources */,
+				7387A206139797090038A5CC /* Triangle.m in Sources */,
+				7387A208139797340038A5CC /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -143,7 +211,7 @@
 		7387A1E61397954F0038A5CC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
@@ -161,13 +229,14 @@
 		7387A1E71397954F0038A5CC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -217,6 +286,7 @@
 				7387A1EA1397954F0038A5CC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
