@@ -18,7 +18,6 @@ float sRGBGamma(float color) {
 
 
 @implementation NSColor (RayColor)
-typedef float float4 __attribute__((ext_vector_type(4)));
 
 - (NSColor*) sRGBColor {
 	return [NSColor colorWithCalibratedRed:sRGBGamma([self redComponent])

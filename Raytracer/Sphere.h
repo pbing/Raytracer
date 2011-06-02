@@ -7,16 +7,17 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "float4.h"
 #import "Body.h"
 #import "Ray.h"
 
 
 @interface Sphere : Body {
-	float center[3];
+	float4 center;
 	float radius;
 }
 
-- (void)setCenter:(float*)c;
-- (void)setRadius:(float)r;
+- (void)setCenter:(float4)aCenter;
+- (void)setRadius:(float)aRadius;
 - (BOOL)intersect:(Ray*)ray;
 @end

@@ -7,15 +7,16 @@
 //
 
 #import <Cocoa/Cocoa.h>
-
+#import "float4.h"
 
 @interface Ray : NSObject {
-	float origin[3],direction[3];
+	float4 origin,direction;
 }
 
-- (float*)origin;
-- (float*)direction;
-- (void)setOrigin:(float[3])anOrigin;
-- (void)setDirection:(float[3])aDirection;
+- (float4)origin;
+- (float4)direction;
+
+- (void)setOrigin:(float4)anOrigin;
+- (void)setDirection:(float4)aDirection;
 
 @end

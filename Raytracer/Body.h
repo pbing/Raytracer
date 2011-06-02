@@ -12,7 +12,7 @@
 
 @interface Body : NSObject {
 	float t;
-	float normalVector[3];
+	float4 normalVector;
 	
 	NSColor *color;
 	float ka;    // ambient reflection factor
@@ -22,7 +22,7 @@
 }
 
 - (float)t;
-- (float*)normalVector;
+- (float4)normalVector;
 
 - (NSColor*)color;
 - (float)ka;

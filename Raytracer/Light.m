@@ -14,22 +14,18 @@
 -(id) init {
 	[super init];
 	
-	[self setLocation:(float[3]){0.0,0.0,0.0}];
+	[self setLocation:(float4){0.0,0.0,0.0,0.0}];
 	[self setColor:[[NSColor whiteColor] colorUsingColorSpaceName:NSCalibratedRGBColorSpace]];
 	 
 	return self;
 }
 
--(float*)location {return location;}
+-(float4)location {return location;}
 
 -(NSColor*)color {return color;}
 
--(void) setLocation:(float[3])loc {
-	location[0]=loc[0];
-	location[1]=loc[1];
-	location[2]=loc[2];
-}
+-(void) setLocation:(float4)aLocation {location=aLocation;}
 
--(void) setColor:(NSColor*)col {color=col;}
+-(void) setColor:(NSColor*)aColor {color=aColor;}
 
 @end

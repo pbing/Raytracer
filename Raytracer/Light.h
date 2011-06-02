@@ -7,15 +7,15 @@
 //
 
 #import <Cocoa/Cocoa.h>
-
+#include "float4.h"
 
 @interface Light : NSObject {
-	float location[3];
+	float4 location;
 	NSColor *color;
 }
 
--(float*)location;
+-(float4)location;
 -(NSColor*)color;
--(void) setLocation:(float[3])loc;
--(void) setColor:(NSColor*)col;
+-(void) setLocation:(float4)aLocation;
+-(void) setColor:(NSColor*)aColor;
 @end

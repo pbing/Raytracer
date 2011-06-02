@@ -7,20 +7,21 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "float4.h"
 #import "Body.h"
 #import "Ray.h"
 
 @interface Triangle : Body {
-	float v0[3],v1[3],v2[3];
+	float4 v0,v1,v2;
 	float u,v;
 }
 
 - (float)u;
 - (float)v;
 
-- (void)setV0:(float[3])p;
-- (void)setV1:(float[3])p;
-- (void)setV2:(float[3])p;
+- (void)setV0:(float4)p;
+- (void)setV1:(float4)p;
+- (void)setV2:(float4)p;
 
 - (BOOL)intersect:(Ray *)ray;
 @end

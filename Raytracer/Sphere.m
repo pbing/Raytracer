@@ -6,63 +6,37 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import <math.h>
 #import "Sphere.h"
-
-#define DOT(v1,v2) (v1[0]*v2[0]+v1[1]*v2[1]+v1[2]*v2[2])
-
-#define ADD(dest,v1,v2) \
-	dest[0]=v1[0]+v2[0]; \
-	dest[1]=v1[1]+v2[1]; \
-	dest[2]=v1[2]+v2[2]
-
-#define SUB(dest,v1,v2) \
-	dest[0]=v1[0]-v2[0]; \
-	dest[1]=v1[1]-v2[1]; \
-	dest[2]=v1[2]-v2[2]
-
-#define SMUL(dest,v1,s) \
-	dest[0]=s*v1[0]; \
-	dest[1]=s*v1[1]; \
-	dest[2]=s*v1[2]
 
 @implementation Sphere
 
-- (void)setCenter:(float*)c {
-	center[0]=c[0];
-	center[1]=c[1];
-	center[2]=c[2];
-}
+- (void)setCenter:(float4)aCenter {center=aCenter;}
 
-- (void)setRadius:(float)r {radius=r;}
-
-//- (float)t {return t;}
+- (void)setRadius:(float)aRadius {radius=aRadius;}
 
 - (BOOL)intersect:(Ray*)ray {
-	float *orig=[ray origin];
-	float *dir=[ray direction];
-	
-	float tvec[3];
+	float4 orig=[ray origin];
+	float4 dir=[ray direction];
 	
 	/* calulate distance from center to ray origin */
-	SUB(tvec,orig,center);
+	float4 tvec=orig-center;
 	
 	/* calculate discriminant */
-	float a=DOT(dir,dir);
-	float b=2*DOT(dir,tvec);
-	float c=DOT(tvec,tvec)-radius*radius;
+	float a=dot(dir,dir);
+	float b=2*dot(dir,tvec);
+	float c=dot(tvec,tvec)-radius*radius;
 	float discr=b*b-4*a*c;
 	
 	/* if discrimant is negative, he ray has missed the sphere */
-	if(discr<0.0) return FALSE;
+	if(discr<0.0f) return FALSE;
 
 	float sqrt_discr=sqrtf(discr);
 	float q;
 	
-	if(b<0.0)
-		q=(-b+sqrt_discr)/(2.0*a);
+	if(b<0.0f)
+		q=(-b+sqrt_discr)/(2*a);
 	else
-		q=(-b-sqrt_discr)/(2.0*a);
+		q=(-b-sqrt_discr)/(2*a);
 	
     float t0=q/a;
     float t1=c/q;
@@ -71,19 +45,19 @@
 	 * If t1 is less than zero, the object is in the ray's negative direction
 	 * and consequently the ray misses the sphere. 
 	 */
-    if(t1<0) return FALSE;
+    if(t1<0.0f) return FALSE;
 	
     if(t1<t0) t=t1; else t=t0;
 
 	/* calculate normal vector */
-	float ivec[3]; // intersection
-	SMUL(ivec,dir,t);
-	ADD(ivec,ivec,orig);
+	float4 ivec=t*dir+orig; // intersection
 	
-	float nvec[3]; // normal vector
-	SUB(nvec,ivec,center);
-	float scale=1.0/sqrtf(DOT(nvec,nvec));
-	SMUL(normalVector,nvec,scale);
+	float4 nvec=ivec-center; // normal vector
+	float scale=1.0/sqrtf(dot(nvec,nvec));
+	float4 normal=scale*nvec;
+    normalVector[0]=normal.x;
+    normalVector[1]=normal.y;
+    normalVector[2]=normal.z;
 
 	return TRUE;	
 }

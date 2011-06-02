@@ -9,24 +9,6 @@
 #import "RayColor.h"
 #import "Raytrace.h"
 
-#define DOT(v1,v2) (v1[0]*v2[0]+v1[1]*v2[1]+v1[2]*v2[2])
-
-#define ADD(dest,v1,v2) \
-	dest[0]=v1[0]+v2[0]; \
-	dest[1]=v1[1]+v2[1]; \
-	dest[2]=v1[2]+v2[2]
-
-#define SUB(dest,v1,v2) \
-	dest[0]=v1[0]-v2[0]; \
-	dest[1]=v1[1]-v2[1]; \
-	dest[2]=v1[2]-v2[2]
-
-#define SMUL(dest,v1,s) \
-	dest[0]=s*v1[0]; \
-	dest[1]=s*v1[1]; \
-	dest[2]=s*v1[2]
-
-
 @implementation Raytrace
 
 -(NSBitmapImageRep*)bitmap {return bitmap;}
@@ -63,8 +45,8 @@
 - (NSBitmapImageRep *)raytrace {
 	/* ray */
 	Ray *ray=[[Ray alloc] init];
-	float origin[3]={0.0,0.0,0.0};
-	float direction[3];
+	float4 origin={0.0,0.0,0.0,0.0};
+	float4 direction;
 	[ray setOrigin:origin];
 	
 	bitmap=[[NSBitmapImageRep alloc]
@@ -127,9 +109,9 @@
 #else
 	for(int y=0;y<height;y++) {
 		for(int x=0;x<width;x++) {
-			direction[0]=((float)x/(float)(height))-0.5*(float)width/(float)height;
-			direction[1]=((float)y/(float)(height))-0.5;
-			direction[2]=1.0;
+			direction.x=((float)x/(float)(height))-0.5*(float)width/(float)height;
+			direction.y=((float)y/(float)(height))-0.5;
+			direction.z=1.0;
 			[ray setDirection:direction];
 			
 			NSColor *color=[self trace:ray];
@@ -188,22 +170,17 @@
 	float blue=ka*body_blue_component;
 
 	/* diffuse shading */
-	float *ray_origin=[ray origin];
-	float *ray_direction=[ray direction];
+	float4 ray_origin=[ray origin];
+	float4 ray_direction=[ray direction];
 	float t=[body t];
-	float intersection[3];
-	SMUL(intersection,ray_direction,t);
-	ADD(intersection,intersection,ray_origin);
+	float4 intersection=t*ray_direction+ray_origin;
 
-	float *light_location=[light location];
-	float L[3];
-	SUB(L,light_location,intersection);
-	float scale=1.0/sqrtf(DOT(L,L));
-	SMUL(L,L,scale); // light normal vector
+	float4 light_location=[light location];
+	float4 L=normalize(light_location-intersection);
 	
 	float kd=[body kd];
-	float *N=[body normalVector];
-    float LdotN=DOT(L,N);
+	float4 N=[body normalVector];
+    float LdotN=dot(L,N);
 	float kdiff=kd*fmaxf(0.0,LdotN);
     
 	NSColor *light_color=[light color];
@@ -216,12 +193,10 @@
 	blue+=kdiff*body_blue_component*light_blue_component;
 
 	/* specular shading */
-    float R[3];
-    SMUL(R,N,2*LdotN);
-    SUB(R,L,R); // negate R because ray_direction points towards the plane
+    float4 R=L-2*LdotN*N; // negate R because ray_direction points towards the plane
 	float ks=[body ks];
 	float alpha=[body alpha];
-    float kspec=ks*powf(fmaxf(0.0,DOT(R,ray_direction)),alpha);
+    float kspec=ks*powf(fmaxf(0.0,dot(R,ray_direction)),alpha);
 
     red+=kspec*body_red_component*light_red_component;
 	green+=kspec*body_green_component*light_green_component;

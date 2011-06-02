@@ -41,16 +41,16 @@ int main (int argc, const char * argv[]) {
 	id camera=nil;
 	
 	Light *light1=[[Light alloc] init];
-	[light1 setLocation:(float[3]){-10.0,10.0,0.0}];
+	[light1 setLocation:(float4){-10.0,10.0,0.0,0.0}];
 	[lights addObject:light1];
 
 	Light *light2=[[Light alloc] init];
-	[light2 setLocation:(float[3]){10.0,10.0,0.0}];
+	[light2 setLocation:(float4){10.0,10.0,0.0,0.0}];
 	[light2 setColor:[NSColor colorWithCalibratedRed:0.3 green:0.3 blue:0.3 alpha:1.0]]; 
 //	[lights addObject:light2];
 	
 	Sphere *sphere1=[[Sphere alloc] init];
-	[sphere1 setCenter:(float[3]){0.0,-2.0,7.0}];
+	[sphere1 setCenter:(float4){0.0,-2.0,7.0,0.0}];
 	[sphere1 setRadius:1.0];
 	[sphere1 setColor:[NSColor greenColor]];
 	[sphere1 setKa:0.0];
@@ -60,7 +60,7 @@ int main (int argc, const char * argv[]) {
 	[scene addObject:sphere1];
 	
 	Sphere *sphere2=[[Sphere alloc] init];
-	[sphere2 setCenter:(float[3]){-1.0,0.0,5.0}];
+	[sphere2 setCenter:(float4){-1.0,0.0,5.0,0.0}];
 	[sphere2 setRadius:1.0];	
 	[sphere2 setColor:[NSColor yellowColor]];
 	[sphere2 setKa:0.0];
@@ -70,9 +70,9 @@ int main (int argc, const char * argv[]) {
 	[scene addObject:sphere2];
 	
 	Triangle *triangle1=[[Triangle alloc] init];
-	[triangle1 setV0:(float[3]){0.5,-0.5,6.0}];
-	[triangle1 setV1:(float[3]){1.5,0.5,5.0}];
-	[triangle1 setV2:(float[3]){2.5,-0.5,4.0}];
+	[triangle1 setV0:(float4){0.5,-0.5,6.0,0.0}];
+	[triangle1 setV1:(float4){1.5,0.5,5.0,0.0}];
+	[triangle1 setV2:(float4){2.5,-0.5,4.0,0.0}];
 	[triangle1 setColor:[NSColor blueColor]];
 	[triangle1 setKa:0.0];
 	[triangle1 setKd:0.8];
@@ -81,9 +81,9 @@ int main (int argc, const char * argv[]) {
 	[scene addObject:triangle1];
 	
 	Triangle *triangle2=[[Triangle alloc] init];
-	[triangle2 setV0:(float[3]){0.0,1.0,3.0}];
-	[triangle2 setV1:(float[3]){1.0,1.5,3.0}];
-	[triangle2 setV2:(float[3]){1.5,-1.0,3.0}];
+	[triangle2 setV0:(float4){0.0,1.0,3.0,0.0}];
+	[triangle2 setV1:(float4){1.0,1.5,3.0,0.0}];
+	[triangle2 setV2:(float4){1.5,-1.0,3.0,0.0}];
 	[triangle2 setColor:[NSColor redColor]];
 	[triangle2 setKa:0.0];
 	[triangle2 setKd:0.8];

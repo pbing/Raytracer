@@ -25,7 +25,7 @@
 
 - (float)t {return t;}
 
-- (float*)normalVector {return normalVector;}
+- (float4)normalVector {return normalVector;}
 
 - (float)ka {return ka;}
 	
