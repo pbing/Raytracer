@@ -40,24 +40,24 @@
 	return self;
 }
 
-- (void)setWidth:(int)w setHeight:(int)h setOversampling:(int)o {
-	width=w;
-	height=h;
-	oversampling=o;
+- (void)setWidth:(int)aWidth setHeight:(int)aHeight setOversampling:(int)aOversampling {
+	width=aWidth;
+	height=aHeight;
+	oversampling=aOversampling;
 }
 
-- (void)setWidth:(int)w setHeight:(int)h {
-	[self setWidth:w setHeight:h setOversampling:1];
+- (void)setWidth:(int)aWidth setHeight:(int)aHeight {
+	[self setWidth:aWidth setHeight:aHeight setOversampling:1];
 }
 
-- (void)setScene:(NSMutableArray*)scn setLights:(NSMutableArray*)lgts setCamera:(id)cam {
-	scene=scn;
-	lights=lgts;
-	camera=cam;
+- (void)setScene:(NSMutableArray*)aScene setLights:(NSMutableArray*)theLights setCamera:(id)aCamera {
+	scene=aScene;
+	lights=theLights;
+	camera=aCamera;
 }
 
-- (void)setBackgroundColor:(NSColor*)bgcolor {
-	backgroundColor=[bgcolor colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
+- (void)setBackgroundColor:(NSColor*)bgColor {
+	backgroundColor=[bgColor colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
 }
 
 - (NSBitmapImageRep *)raytrace {
@@ -163,26 +163,26 @@
 		return backgroundColor;
 }
 
-- (NSColor*)shade:(Ray*)ray body:(Body*)b {
+- (NSColor*)shade:(Ray*)ray body:(Body*)body {
 	NSColor *radiance=[[NSColor clearColor] colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
 	
 	/* for each light source */
 	for(int i=0;i<[lights count];i++)
-		radiance=[radiance addColor:[self phongIllumination:ray body:b light:[lights objectAtIndex:i]]];
+		radiance=[radiance addColor:[self phongIllumination:ray body:body light:[lights objectAtIndex:i]]];
 	
 	/* TODO for each reflected ray... */
 	/* TODO for each refracted ray... */
 	return radiance;
 }
 
-- (NSColor*)phongIllumination:(Ray*)ray body:(Body*)bdy light:(Light*)lgt {
-	NSColor *body_color=[bdy color];
+- (NSColor*)phongIllumination:(Ray*)ray body:(Body*)body light:(Light*)light {
+	NSColor *body_color=[body color];
 	float body_red_component=[body_color redComponent];
 	float body_green_component=[body_color greenComponent];
 	float body_blue_component=[body_color blueComponent];
 	
 	/* ambient shading */
-	float ka=[bdy ka];
+	float ka=[body ka];
 	float red=ka*body_red_component;
 	float green=ka*body_green_component;
 	float blue=ka*body_blue_component;
@@ -190,22 +190,23 @@
 	/* diffuse shading */
 	float *ray_origin=[ray origin];
 	float *ray_direction=[ray direction];
-	float t=[bdy t];
+	float t=[body t];
 	float intersection[3];
 	SMUL(intersection,ray_direction,t);
 	ADD(intersection,intersection,ray_origin);
 
-	float *light_location=[lgt location];
+	float *light_location=[light location];
 	float L[3];
 	SUB(L,light_location,intersection);
 	float scale=1.0/sqrtf(DOT(L,L));
 	SMUL(L,L,scale); // light normal vector
 	
-	float kd=[bdy kd];
-	float *N=[bdy normalVector];
-	float kdiff=kd*fmaxf(0.0,DOT(L,N));
-	NSColor *light_color=[lgt color];
-	
+	float kd=[body kd];
+	float *N=[body normalVector];
+    float LdotN=DOT(L,N);
+	float kdiff=kd*fmaxf(0.0,LdotN);
+    
+	NSColor *light_color=[light color];
 	float light_red_component=[light_color redComponent];
 	float light_green_component=[light_color greenComponent];
 	float light_blue_component=[light_color blueComponent];
@@ -214,7 +215,18 @@
 	green+=kdiff*body_green_component*light_green_component;
 	blue+=kdiff*body_blue_component*light_blue_component;
 
-	/* TODO specular shading... */
+	/* specular shading */
+    float R[3];
+    SMUL(R,N,2*LdotN);
+    SUB(R,L,R); // negate R because ray_direction points towards the plane
+	float ks=[body ks];
+	float alpha=[body alpha];
+    float kspec=ks*powf(fmaxf(0.0,DOT(R,ray_direction)),alpha);
+
+    red+=kspec*body_red_component*light_red_component;
+	green+=kspec*body_green_component*light_green_component;
+	blue+=kspec*body_blue_component*light_blue_component;
+
 	NSColor *radiance=[NSColor colorWithCalibratedRed:red green:green blue:blue alpha:1.0];
 	return radiance;
 }

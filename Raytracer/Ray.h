@@ -15,7 +15,7 @@
 
 - (float*)origin;
 - (float*)direction;
-- (void)setOrigin:(float[3])v;
-- (void)setDirection:(float[3])v;
+- (void)setOrigin:(float[3])anOrigin;
+- (void)setDirection:(float[3])aDirection;
 
 @end

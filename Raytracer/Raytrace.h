@@ -25,14 +25,14 @@
 }
 - (NSBitmapImageRep*)bitmap;
 
-- (void)setWidth:(int)w setHeight:(int)h setOversampling:(int)o;
-- (void)setWidth:(int)w setHeight:(int)h;
-- (void)setScene:(NSMutableArray*)scn setLights:(NSMutableArray*)lgts setCamera:(id)cam;
-- (void)setBackgroundColor:(NSColor*)bgcolor;
+- (void)setWidth:(int)aWidth setHeight:(int)aHeight setOversampling:(int)aOversampling;
+- (void)setWidth:(int)aWidth setHeight:(int)aHeight;
+- (void)setScene:(NSMutableArray*)aScene setLights:(NSMutableArray*)theLights setCamera:(id)aCamera;
+- (void)setBackgroundColor:(NSColor*)bgColor;
 
 - (NSBitmapImageRep *)raytrace;
 - (NSColor*)trace:(Ray*)ray;
-- (NSColor*)shade:(Ray*)ray body:(Body*)b;
+- (NSColor*)shade:(Ray*)ray body:(Body*)body;
 
-- (NSColor*)phongIllumination:(Ray*)ray body:(Body*)bdy light:(Light*)lgt;
+- (NSColor*)phongIllumination:(Ray*)ray body:(Body*)body light:(Light*)light;
 @end

@@ -16,19 +16,19 @@
 
 - (float*)direction {return direction;}
 
-- (void)setOrigin:(float[3])v {
-	origin[0]=v[0];
-	origin[1]=v[1];
-	origin[2]=v[2];
+- (void)setOrigin:(float[3])anOrigin {
+	origin[0]=anOrigin[0];
+	origin[1]=anOrigin[1];
+	origin[2]=anOrigin[2];
 }
 
-- (void)setDirection:(float[3])v {
-	float vv=v[0]*v[0]+v[1]*v[1]+v[2]*v[2];
-	float scale=1.0/sqrt(vv);
+- (void)setDirection:(float[3])aDirection {
+	float vv=aDirection[0]*aDirection[0]+aDirection[1]*aDirection[1]+aDirection[2]*aDirection[2];
+	float scale=1.0/sqrtf(vv);
 	
-	direction[0]=scale*v[0];
-	direction[1]=scale*v[1];
-	direction[2]=scale*v[2];
+	direction[0]=scale*aDirection[0];
+	direction[1]=scale*aDirection[1];
+	direction[2]=scale*aDirection[2];
 }
 
 @end
