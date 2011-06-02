@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7361862B1397E12200F8DD64 /* float4.c in Sources */ = {isa = PBXBuildFile; fileRef = 736186291397E12100F8DD64 /* float4.c */; };
 		7387A1F01397959A0038A5CC /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7387A1EF1397959A0038A5CC /* AppKit.framework */; };
 		7387A1F6139796F00038A5CC /* Body.m in Sources */ = {isa = PBXBuildFile; fileRef = 7387A1F3139796F00038A5CC /* Body.m */; };
 		7387A1F7139796F00038A5CC /* Light.m in Sources */ = {isa = PBXBuildFile; fileRef = 7387A1F5139796F00038A5CC /* Light.m */; };
@@ -31,6 +32,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		736186291397E12100F8DD64 /* float4.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = float4.c; sourceTree = "<group>"; };
+		7361862A1397E12100F8DD64 /* float4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = float4.h; sourceTree = "<group>"; };
 		7387A1DA1397954F0038A5CC /* Raytracer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Raytracer; sourceTree = BUILT_PRODUCTS_DIR; };
 		7387A1DE1397954F0038A5CC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		7387A1E41397954F0038A5CC /* Raytracer-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Raytracer-Prefix.pch"; sourceTree = "<group>"; };
@@ -137,6 +140,8 @@
 		7387A20B13979C3D0038A5CC /* Basic */ = {
 			isa = PBXGroup;
 			children = (
+				7361862A1397E12100F8DD64 /* float4.h */,
+				736186291397E12100F8DD64 /* float4.c */,
 				7387A1F8139797090038A5CC /* Ray.h */,
 				7387A1F9139797090038A5CC /* Ray.m */,
 				7387A1FA139797090038A5CC /* RayColor.h */,
@@ -202,6 +207,7 @@
 				7387A205139797090038A5CC /* Sphere.m in Sources */,
 				7387A206139797090038A5CC /* Triangle.m in Sources */,
 				7387A208139797340038A5CC /* main.m in Sources */,
+				7361862B1397E12200F8DD64 /* float4.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
