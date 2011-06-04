@@ -16,12 +16,7 @@
 	float u,v;
 }
 
-- (float)u;
-- (float)v;
+@property float4 v0,v1,v2;
+@property (readonly) float u,v;
 
-- (void)setV0:(float4)p;
-- (void)setV1:(float4)p;
-- (void)setV2:(float4)p;
-
-- (BOOL)intersect:(Ray *)ray;
 @end

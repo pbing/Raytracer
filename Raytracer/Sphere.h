@@ -16,8 +16,7 @@
 	float4 center;
 	float radius;
 }
+@property float4 center;
+@property float radius;
 
-- (void)setCenter:(float4)aCenter;
-- (void)setRadius:(float)aRadius;
-- (BOOL)intersect:(Ray*)ray;
 @end

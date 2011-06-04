@@ -15,40 +15,24 @@
 	[super init];
 	
 	/* default: only ambient shading */
-	ka=1.0;
-	kd=0.0;
-	ks=0.0;
+	kDiff=0.0;
+	kSpec=0.0;
 	alpha=0.0;
-
+    cRefl=0.0;
+    
 	return self;
 }
 
-- (float)t {return t;}
-
-- (float4)normalVector {return normalVector;}
-
-- (float)ka {return ka;}
-	
-- (float)kd {return kd;}
-
-- (float)ks {return ks;}
-
-- (float)alpha {return alpha;}
-
-- (void)setKa:(float)a {ka=a;}
-
-- (void)setKd:(float)d {kd=d;}
-
-- (void)setKs:(float)s {ks=s;}
-
-- (void)setAlpha:(float)a {alpha=a;}
+@synthesize kDiff,kSpec,alpha,cRefl;
 
 - (NSColor*)color {return color;}
 
-- (void)setColor:(NSColor*)c {
-	color=[c colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
+- (void)setColor:(NSColor*)aColor {
+	color=[aColor colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
 }
 
-- (BOOL)intersect:(Ray*)ray {return FALSE;}
+- (float)intersect:(Ray*)ray {return FALSE;}
+
+- (float4)normalVector:(float4)surfacePoint {return (float4){0.0,0.0,0.0,0.0};}
 
 @end

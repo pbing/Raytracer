@@ -1,6 +1,4 @@
 #import <AppKit/AppKit.h>
-#import "Sphere.h"
-#import "Triangle.h"
 #import "Raytrace.h"
 
 int main (int argc, const char * argv[]) {
@@ -47,26 +45,27 @@ int main (int argc, const char * argv[]) {
 	Light *light2=[[Light alloc] init];
 	[light2 setLocation:(float4){10.0,10.0,0.0,0.0}];
 	[light2 setColor:[NSColor colorWithCalibratedRed:0.3 green:0.3 blue:0.3 alpha:1.0]]; 
-//	[lights addObject:light2];
+	//[lights addObject:light2];
 	
 	Sphere *sphere1=[[Sphere alloc] init];
 	[sphere1 setCenter:(float4){0.0,-2.0,7.0,0.0}];
 	[sphere1 setRadius:1.0];
 	[sphere1 setColor:[NSColor greenColor]];
-	[sphere1 setKa:0.0];
-	[sphere1 setKd:0.8];	
-	[sphere1 setKs:0.2];	
-	[sphere1 setAlpha:50];	
+	[sphere1 setKDiff:0.5];	
+	[sphere1 setKSpec:0.4];	
+	[sphere1 setAlpha:50];
+	[sphere1 setCRefl:0.2];
 	[scene addObject:sphere1];
 	
 	Sphere *sphere2=[[Sphere alloc] init];
-	[sphere2 setCenter:(float4){-1.0,0.0,5.0,0.0}];
+	[sphere2 setCenter:(float4){-0.5,0.4,5.6,0.0}];
+//	[sphere2 setCenter:(float4){-1.0,-2.0,7.0,0.0}]; // FIXME: intersected objects
 	[sphere2 setRadius:1.0];	
 	[sphere2 setColor:[NSColor yellowColor]];
-	[sphere2 setKa:0.0];
-	[sphere2 setKd:0.8];
-	[sphere2 setKs:0.2];
+	[sphere2 setKDiff:0.5];
+	[sphere2 setKSpec:0.4];
 	[sphere2 setAlpha:50];	
+	[sphere2 setCRefl:0.2];
 	[scene addObject:sphere2];
 	
 	Triangle *triangle1=[[Triangle alloc] init];
@@ -74,27 +73,26 @@ int main (int argc, const char * argv[]) {
 	[triangle1 setV1:(float4){1.5,0.5,5.0,0.0}];
 	[triangle1 setV2:(float4){2.5,-0.5,4.0,0.0}];
 	[triangle1 setColor:[NSColor blueColor]];
-	[triangle1 setKa:0.0];
-	[triangle1 setKd:0.8];
-	[triangle1 setKs:0.2];
-	[triangle1 setAlpha:50];	
-	[scene addObject:triangle1];
+	[triangle1 setKDiff:0.5];
+	[triangle1 setCRefl:0.2];
+	//[scene addObject:triangle1];
 	
 	Triangle *triangle2=[[Triangle alloc] init];
 	[triangle2 setV0:(float4){0.0,1.0,3.0,0.0}];
 	[triangle2 setV1:(float4){1.0,1.5,3.0,0.0}];
 	[triangle2 setV2:(float4){1.5,-1.0,3.0,0.0}];
 	[triangle2 setColor:[NSColor redColor]];
-	[triangle2 setKa:0.0];
-	[triangle2 setKd:0.8];
-	[triangle2 setKs:0.2];
-	[triangle2 setAlpha:50];	
-	[scene addObject:triangle2];
+	[triangle2 setKDiff:0.5];
+	[triangle2 setCRefl:0.2];
+	//[scene addObject:triangle2];
 	
 	Raytrace *raytrace=[[Raytrace alloc] init];
-	[raytrace setWidth:512 setHeight:512 setOversampling:1];
-	//[raytrace setWidth:1280 setHeight:720];
-	[raytrace setScene:scene setLights:lights setCamera:camera];
+    //[raytrace setBackgroundColor:[NSColor clearColor]];
+	
+    [raytrace setWidth:512 setHeight:512 setOversampling:1];
+	//[raytrace setWidth:1280 setHeight:720 setOversampling:2];
+	
+    [raytrace setScene:scene setLights:lights setCamera:camera];
 	
 	NSBitmapImageRep *bitmap=[raytrace raytrace];
 

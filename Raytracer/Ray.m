@@ -10,12 +10,15 @@
 
 @implementation Ray
 
-- (float4)origin {return origin;}
+- (id)initWithOrigin:(float4)anOrigin direction:(float4)aDirection {
+    [super init];
+    
+    origin=anOrigin;
+    direction=aDirection;
+    
+    return self;
+}
+@synthesize origin,direction;
 
-- (float4)direction {return direction;}
-
-- (void)setOrigin:(float4)anOrigin {origin=anOrigin;}
-
-- (void)setDirection:(float4)aDirection {direction=normalize(aDirection);}
-
+- (float4)pointOnRay:(float)t {return t*direction+origin;}
 @end

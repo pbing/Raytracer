@@ -10,11 +10,9 @@
 
 @implementation Sphere
 
-- (void)setCenter:(float4)aCenter {center=aCenter;}
+@synthesize center,radius;
 
-- (void)setRadius:(float)aRadius {radius=aRadius;}
-
-- (BOOL)intersect:(Ray*)ray {
+- (float)intersect:(Ray*)ray {
 	float4 orig=[ray origin];
 	float4 dir=[ray direction];
 	
@@ -28,7 +26,7 @@
 	float discr=b*b-4*a*c;
 	
 	/* if discrimant is negative, he ray has missed the sphere */
-	if(discr<0.0f) return FALSE;
+	if(discr<0.0f) return -1.0f;
 
 	float sqrt_discr=sqrtf(discr);
 	float q;
@@ -40,26 +38,10 @@
 	
     float t0=q/a;
     float t1=c/q;
-	
-    /* 
-	 * If t1 is less than zero, the object is in the ray's negative direction
-	 * and consequently the ray misses the sphere. 
-	 */
-    if(t1<0.0f) return FALSE;
-	
-    if(t1<t0) t=t1; else t=t0;
-
-	/* calculate normal vector */
-	float4 ivec=t*dir+orig; // intersection
-	
-	float4 nvec=ivec-center; // normal vector
-	float scale=1.0/sqrtf(dot(nvec,nvec));
-	float4 normal=scale*nvec;
-    normalVector[0]=normal.x;
-    normalVector[1]=normal.y;
-    normalVector[2]=normal.z;
-
-	return TRUE;	
+    return (t1<t0)?t1:t0;
 }
 
+- (float4)normalVector:(float4)surfacePoint {
+    return normalize(surfacePoint-center);
+}
 @end

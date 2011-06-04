@@ -15,17 +15,17 @@
 	[super init];
 	
 	[self setLocation:(float4){0.0,0.0,0.0,0.0}];
-	[self setColor:[[NSColor whiteColor] colorUsingColorSpaceName:NSCalibratedRGBColorSpace]];
+	[self setColor:[NSColor whiteColor]];
 	 
 	return self;
 }
 
--(float4)location {return location;}
+@synthesize location;
 
 -(NSColor*)color {return color;}
 
--(void) setLocation:(float4)aLocation {location=aLocation;}
-
--(void) setColor:(NSColor*)aColor {color=aColor;}
+-(void) setColor:(NSColor*)aColor {
+    color=[aColor colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
+}
 
 @end

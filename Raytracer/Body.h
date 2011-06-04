@@ -11,30 +11,19 @@
 
 
 @interface Body : NSObject {
-	float t;
-	float4 normalVector;
-	
 	NSColor *color;
-	float ka;    // ambient reflection factor
-	float kd;    // diffuse reflection factor
-	float ks;    // specular reflection factor
+	float kDiff; // diffuse reflection factor
+	float kSpec; // specular reflection factor
 	float alpha; // shininess
+    float cRefl; // reflection coefficient
 }
 
-- (float)t;
-- (float4)normalVector;
+@property float kDiff,kSpec,alpha,cRefl;
 
 - (NSColor*)color;
-- (float)ka;
-- (float)kd;
-- (float)ks;
-- (float)alpha;
+- (void)setColor:(NSColor*)aColor;
 
-- (void)setColor:(NSColor*)c;
-- (void)setKa:(float)a;
-- (void)setKd:(float)d;
-- (void)setKs:(float)s;
-- (void)setAlpha:(float)a;
+- (float)intersect:(Ray*)ray;
+- (float4)normalVector:(float4)intersectionPoint;
 
-- (BOOL)intersect:(Ray*)ray;
 @end

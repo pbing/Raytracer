@@ -8,8 +8,13 @@
 
 #import <Cocoa/Cocoa.h>
 #import "Ray.h"
-#import "Body.h"
+#import "RayColor.h"
 #import "Light.h"
+#import "Body.h"
+#import "Sphere.h"
+#import "Triangle.h"
+
+#define MAX_RAYTRACE_RECURSION 8
 
 @interface Raytrace : NSObject {
 	int width;
@@ -32,7 +37,6 @@
 
 - (NSBitmapImageRep *)raytrace;
 - (NSColor*)trace:(Ray*)ray;
-- (NSColor*)shade:(Ray*)ray body:(Body*)body;
-
-- (NSColor*)phongIllumination:(Ray*)ray body:(Body*)body light:(Light*)light;
+- (NSColor*)shade:(Ray*)ray body:(Body*)body distanceToIntersection:(float)distance;
+- (BOOL)occluded:(Ray*)ray distanceToLight:(float)distance;
 @end

@@ -14,8 +14,8 @@
 	NSColor *color;
 }
 
--(float4)location;
+@property float4 location;
+
 -(NSColor*)color;
--(void) setLocation:(float4)aLocation;
 -(void) setColor:(NSColor*)aColor;
 @end

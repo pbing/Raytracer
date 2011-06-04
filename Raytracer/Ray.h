@@ -13,10 +13,8 @@
 	float4 origin,direction;
 }
 
-- (float4)origin;
-- (float4)direction;
+@property float4 origin,direction;
 
-- (void)setOrigin:(float4)anOrigin;
-- (void)setDirection:(float4)aDirection;
-
+- (id)initWithOrigin:(float4)anOrigin direction:(float4)aDirection;
+- (float4)pointOnRay:(float)t;
 @end

@@ -10,10 +10,10 @@
 
 /* sRGB gamma correction. */
 float sRGBGamma(float color) {
-	if(color>0.0031308)
-		return 1.055*powf(color,1.0/2.4)-0.055;
+	if(color>0.0031308f)
+		return 1.055f*powf(color,1.0f/2.4f)-0.055f;
 	else
-		return 12.92*color;
+		return 12.92f*color;
 }	
 
 
