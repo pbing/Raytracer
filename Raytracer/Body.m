@@ -11,7 +11,7 @@
 
 @implementation Body
 
-@synthesize kDiff,kSpec,alpha,cRefl;
+@synthesize kDiff,kSpec,alpha,beta,cRefl;
 
 - (id) init {
 	[super init];
@@ -20,6 +20,7 @@
 	kDiff=0.0;
 	kSpec=0.0;
 	alpha=0.0;
+	beta=0.0;
     cRefl=0.0;
 
     [self setColor:[NSColor whiteColor]];

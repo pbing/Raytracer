@@ -47,7 +47,7 @@
 	float4 origin={0.0,0.0,0.0,0.0};
 	float4 direction;
 	[ray setOrigin:origin];
-	
+ 	
 	bitmap=[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
                                                    pixelsWide:width
                                                    pixelsHigh:height
@@ -146,7 +146,10 @@
 	float kd=[body kDiff];
 	float ks=[body kSpec];
 	float alpha=[body alpha];
-	float ka=1.0-kd-ks;
+    float beta=[body beta];
+    
+	float ka=1.0f-kd-ks;
+    float normalizeFactor=(alpha+8.0)/(8.0*M_PI); // Phong:(n+2)/2π, Blinn-Phong:(n+8)/8π
     
 	NSColor *bodyColor=[body color];
 	float bodyRedComponent=[bodyColor redComponent];
@@ -184,22 +187,23 @@
             
             /* specular shading (Blinn-Phong) */
             float4 H=normalize(L+V);
-            float kspec=ks*powf(fmaxf(0.0f,dot(N,H)),alpha);
-            red+=kspec*lightRedComponent;
-            green+=kspec*lightGreenComponent;
-            blue+=kspec*lightBlueComponent;
+            float kspec=normalizeFactor*ks*powf(fmaxf(0.0f,dot(N,H)),alpha);
+//            float kspec=ks*powf(fmaxf(0.0f,dot(N,H)),alpha);
+            red+=kspec*(1.0f+beta*(bodyRedComponent-1.0f))*lightRedComponent;
+            green+=kspec*(1.0f+beta*(bodyGreenComponent-1.0f))*lightGreenComponent;
+            blue+=kspec*(1.0f+beta*(bodyBlueComponent-1.0f))*lightBlueComponent;
             
         }
         
         if(recursionDepth>1) {
             /* for each reflected ray */
-            float cr=[body cRefl];
+            float cRefl=[body cRefl];
             float4 R=2*dot(V,N)*N-V;
             Ray *reflRay=[[Ray alloc] initWithOrigin:intersection direction:R]; 
             NSColor *reflColor=[self trace:reflRay depth:recursionDepth-1];
-            red=(1.0-cr)*red+cr*[reflColor redComponent];
-            green=(1.0-cr)*green+cr*[reflColor greenComponent];
-            blue=(1.0-cr)*blue+cr*[reflColor blueComponent];
+            red=(1.0-cRefl)*red+cRefl*[reflColor redComponent];
+            green=(1.0-cRefl)*green+cRefl*[reflColor greenComponent];
+            blue=(1.0-cRefl)*blue+cRefl*[reflColor blueComponent];
             
             /* TODO for each refracted ray... */
         }

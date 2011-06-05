@@ -15,10 +15,11 @@
 	float kDiff; // diffuse reflection factor
 	float kSpec; // specular reflection factor
 	float alpha; // shininess
+	float beta;  // metalness (0=plastic 1=metal)
     float cRefl; // reflection coefficient
 }
 
-@property float kDiff,kSpec,alpha,cRefl;
+@property float kDiff,kSpec,alpha,beta,cRefl;
 
 - (NSColor*)color;
 - (void)setColor:(NSColor*)aColor;

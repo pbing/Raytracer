@@ -39,14 +39,19 @@ int main (int argc, const char * argv[]) {
 	id camera=nil;
 	
 	Light *light1=[[Light alloc] init];
-	[light1 setLocation:(float4){-10.0,10.0,0.0,0.0}];
+	[light1 setLocation:(float4){10.0,10.0,0.0,0.0}];
 //	[light1 setLocation:(float4){0.0,0.0,-10.0,0.0}];
 	[lights addObject:light1];
 
 	Light *light2=[[Light alloc] init];
-	[light2 setLocation:(float4){10.0,10.0,0.0,0.0}];
+	[light2 setLocation:(float4){-17.3,5.8,0.0,0.0}];
 	[light2 setColor:[NSColor colorWithCalibratedRed:0.3 green:0.3 blue:0.3 alpha:1.0]]; 
 	[lights addObject:light2];
+
+	Light *light3=[[Light alloc] init];
+	[light3 setLocation:(float4){0.0,0.0,20.0,0.0}];
+	[light3 setColor:[NSColor colorWithCalibratedRed:0.5 green:0.5 blue:0.5 alpha:1.0]]; 
+	[lights addObject:light3];
 
 #if FALSE
 	Sphere *sphere1=[[Sphere alloc] init];
@@ -90,11 +95,14 @@ int main (int argc, const char * argv[]) {
 #endif
 
 #if TRUE
-    const int N=2;
+    const int N=3;
     const float radius=0.5;
     const float PHI=(1.0+sqrtf(5))/2.0;
     float4 center;
     float ds=2.0*PHI*radius;
+    
+//    [light1 setColor:[NSColor colorWithCalibratedWhite:0.10 alpha:1.0]];
+//    [light2 setColor:[NSColor colorWithCalibratedWhite:0.03 alpha:1.0]];
     
     for(int k=0;k<N;k++)
         for(int j=0;j<N;j++)
@@ -104,12 +112,13 @@ int main (int argc, const char * argv[]) {
                 center.y=((float)j-(float)(N-1)/2.0)*ds;
                 center.z=(k+N)*ds;
                 
-                [sphere setColor:[NSColor colorWithCalibratedRed:(float)i/(float)N green:(float)j/(float)N blue:(float)k/(float)N alpha:1.0]];
+                [sphere setColor:[NSColor colorWithCalibratedRed:(float)i/(float)(N-1) green:(float)j/(float)(N-1) blue:(float)k/(float)(N-1) alpha:1.0]];
                 [sphere setCenter:center];
                 [sphere setRadius:radius];
-                [sphere setKDiff:0.5];
-                [sphere setKSpec:0.4];
-                [sphere setAlpha:50];	
+                [sphere setKDiff:0.8];
+                [sphere setKSpec:0.2];
+                [sphere setAlpha:150]; // shininess 
+                [sphere setBeta:0.5];  // 0.0=plastic 1.0=metal
                 [sphere setCRefl:0.2];
                 
                 [scene addObject:sphere];
@@ -119,8 +128,8 @@ int main (int argc, const char * argv[]) {
 	Raytrace *raytrace=[[Raytrace alloc] init];
     [raytrace setBackgroundColor:[NSColor clearColor]];
 	
-    //[raytrace setWidth:512 setHeight:512 setOversampling:1];
-	[raytrace setWidth:1280 setHeight:720 setOversampling:4];
+    [raytrace setWidth:512 setHeight:512 setOversampling:1];
+	//[raytrace setWidth:1280 setHeight:720 setOversampling:4];
 	
     [raytrace setScene:scene setLights:lights setCamera:camera];
 	
@@ -131,6 +140,7 @@ int main (int argc, const char * argv[]) {
 	
 	[light1 release];
 	[light2 release];
+	[light3 release];
 	//[camera release];
 //	[sphere1 release];
 //	[sphere2 release];
