@@ -11,6 +11,8 @@
 
 @implementation Body
 
+@synthesize kDiff,kSpec,alpha,cRefl;
+
 - (id) init {
 	[super init];
 	
@@ -19,11 +21,10 @@
 	kSpec=0.0;
 	alpha=0.0;
     cRefl=0.0;
-    
+
+    [self setColor:[NSColor whiteColor]];
 	return self;
 }
-
-@synthesize kDiff,kSpec,alpha,cRefl;
 
 - (NSColor*)color {return color;}
 
@@ -31,7 +32,7 @@
 	color=[aColor colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
 }
 
-- (float)intersect:(Ray*)ray {return FALSE;}
+- (float)intersect:(Ray*)ray {return -1.0f;}
 
 - (float4)normalVector:(float4)surfacePoint {return (float4){0.0,0.0,0.0,0.0};}
 

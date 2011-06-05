@@ -42,22 +42,26 @@
 }
 
 - (NSBitmapImageRep *)raytrace {
-	/* ray */
+	/* FIXME ray */
 	Ray *ray=[[Ray alloc] init];
 	float4 origin={0.0,0.0,0.0,0.0};
 	float4 direction;
 	[ray setOrigin:origin];
 	
-	bitmap=[[NSBitmapImageRep alloc]
-			initWithBitmapDataPlanes:NULL
-			pixelsWide:width pixelsHigh:height
-			bitsPerSample:8 samplesPerPixel:3 hasAlpha:NO
-			isPlanar:NO colorSpaceName:NSCalibratedRGBColorSpace
-			bytesPerRow:0 bitsPerPixel:0];
-#if 0
+	bitmap=[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
+                                                   pixelsWide:width
+                                                   pixelsHigh:height
+                                                bitsPerSample:8
+                                              samplesPerPixel:3
+                                                     hasAlpha:NO
+                                                     isPlanar:NO
+                                               colorSpaceName:NSCalibratedRGBColorSpace
+                                                  bytesPerRow:0
+                                                 bitsPerPixel:0];
+    
 	/* antialiasing with box filter */
-	float delta_pixel=(1.0/(float)oversampling);
-	float offs_pixel=-0.5*((float)(oversampling-1.0)/(float)oversampling);
+	float deltaPixel=(1.0/(float)oversampling);
+	float offsPixel=-0.5*((float)(oversampling-1.0)/(float)oversampling);
 	float xx,yy;
 	float scale=1.0/((float)oversampling*(float)oversampling);
 	
@@ -65,60 +69,45 @@
 		for(int x=0;x<width;x++) {
 			float color[3]={0.0,0.0,0.0};
 			for(int i=0;i<oversampling;i++) {
-				yy=y+i*delta_pixel+offs_pixel;
+				yy=y+i*deltaPixel+offsPixel;
 				for(int j=0;j<oversampling;j++) {
-					xx=x+j*delta_pixel+offs_pixel;
+					xx=x+j*deltaPixel+offsPixel;
 					
-					direction[0]=((float)xx/(float)(height))-0.5*(float)width/(float)height;
-					direction[1]=((float)yy/(float)(height))-0.5;
-					direction[2]=1.0;
-					[ray setDirection:direction];
+                    /* pin hole camera with distorsion of objects in the corners */
+//					direction.x=((float)xx/(float)(height))-0.5*(float)width/(float)height;
+//					direction.y=((float)yy/(float)(height))-0.5;
+//					direction.z=1.0;
+//					[ray setDirection:normalize(direction)];
 					
-					/* intersection test of all bodies */
-					Body *body,*nearest_body=NULL;
-					float t=MAXFLOAT;
+                    /* perspective projection with barrel distorsions for large p.o.v. */
+					float xt=((float)xx/(float)(height))-0.5*(float)width/(float)height;
+					float yt=((float)yy/(float)(height))-0.5;
+                    float zt=1.0f;
+					float s=norm((float4){xt,yt,zt,0.0});
+                    direction.x=xt*s;
+                    direction.y=yt*s;
+                    direction.z=zt;
+					[ray setDirection:normalize(direction)];
 					
-					/* get body with nearest intersection */
-					for(int i=0;i<[scene count];i++) {
-						body=[scene objectAtIndex:i];
-						if([body intersect:ray] && [body t]<t) { // use intersect first!
-							t=[body t];
-							nearest_body=body;
-						}
-					}
-					/* use color of nearest interception point */
-					if(nearest_body) {
-						color[0]+=scale*[[nearest_body color] redComponent];
-						color[1]+=scale*[[nearest_body color] greenComponent];
-						color[2]+=scale*[[nearest_body color] blueComponent];
-					} else {
-						color[0]+=scale*[backgroundColor redComponent];
-						color[1]+=scale*[backgroundColor greenComponent];
-						color[2]+=scale*[backgroundColor blueComponent];
-					}
+//					/* orthographic projection */
+//					origin.x=((float)xx/(float)(height))-0.5*(float)width/(float)height;
+//					origin.y=((float)yy/(float)(height))-0.5;
+//                  origin.z=0.0;
+//                  [ray setOrigin:5.0f*origin];
+//                  [ray setDirection:(float4){0.0,0.0,1.0,0.0}];
+                    
+                    NSColor *sampleColor=[self trace:ray];
+                    
+                    color[0]+=scale*[sampleColor redComponent];
+                    color[1]+=scale*[sampleColor greenComponent];
+                    color[2]+=scale*[sampleColor blueComponent];
 				}
 			}
-			NSColor *color_pixel=[NSColor colorWithCalibratedRed:sRGBGamma(color[0])
-														   green:sRGBGamma(color[1])
-															blue:sRGBGamma(color[2])
-														   alpha:1.0];
-			[bitmap setColor:color_pixel atX:x y:(height-y-1)];
+            
+			NSColor *sRGBColor=[[NSColor colorWithCalibratedRed:color[0] green:color[1] blue:color[2] alpha:1.0] sRGBColor];
+			[bitmap setColor:sRGBColor atX:x y:(height-y-1)];
 		}
 	}
-#else
-	for(int y=0;y<height;y++) {
-		for(int x=0;x<width;x++) {
-			direction.x=((float)x/(float)(height))-0.5*(float)width/(float)height;
-			direction.y=((float)y/(float)(height))-0.5;
-			direction.z=1.0;
-			[ray setDirection:direction];
-			
-			NSColor *color=[self trace:ray];
-			NSColor *sRGB_color=[color sRGBColor];
-			[bitmap setColor:sRGB_color atX:x y:(height-y-1)];
-		}
-	}
-#endif
 	[ray release];
 	[bitmap autorelease];
 	return bitmap;
@@ -149,8 +138,7 @@
 	float kd=[body kDiff];
 	float ks=[body kSpec];
 	float alpha=[body alpha];
-	//float ka=1.0-kd-ks;
-    float ka=0.0;
+	float ka=1.0-kd-ks;
     
 	NSColor *bodyColor=[body color];
 	float bodyRedComponent=[bodyColor redComponent];
@@ -182,16 +170,10 @@
             /* diffuse reflection */            
             float LdotN=dot(L,N);
             float kdiff=kd*fmaxf(0.0,LdotN);
-            //printf("L=(%f,%f,%f) N=(%f,%f,%f) L.N=%f\n",L.x,L.y,L.z,N.x,N.y,N.z,LdotN);
-            if(LdotN>0.0) {
-                red=1.0;
-                green=1.0;
-                blue=1.0;
-            } else {
             red+=kdiff*bodyRedComponent*lightRedComponent;
             green+=kdiff*bodyGreenComponent*lightGreenComponent;
             blue+=kdiff*bodyBlueComponent*lightBlueComponent;
-            }
+            
         }
         
         
@@ -203,11 +185,11 @@
 }
 
 - (BOOL)occluded:(Ray*)ray distanceToLight:(float)distance {
-    /*for(Body *body in scene) {
+    for(Body *body in scene) {
         float t=[body intersect:ray];
         if(t>0.001f*distance && t<distance)
             return TRUE;
-    } */  
+    }  
     return FALSE;
 }
 @end

@@ -40,13 +40,15 @@ int main (int argc, const char * argv[]) {
 	
 	Light *light1=[[Light alloc] init];
 	[light1 setLocation:(float4){-10.0,10.0,0.0,0.0}];
+//	[light1 setLocation:(float4){0.0,0.0,-10.0,0.0}];
 	[lights addObject:light1];
 
 	Light *light2=[[Light alloc] init];
 	[light2 setLocation:(float4){10.0,10.0,0.0,0.0}];
 	[light2 setColor:[NSColor colorWithCalibratedRed:0.3 green:0.3 blue:0.3 alpha:1.0]]; 
-	//[lights addObject:light2];
-	
+	[lights addObject:light2];
+
+#if FALSE
 	Sphere *sphere1=[[Sphere alloc] init];
 	[sphere1 setCenter:(float4){0.0,-2.0,7.0,0.0}];
 	[sphere1 setRadius:1.0];
@@ -85,9 +87,33 @@ int main (int argc, const char * argv[]) {
 	[triangle2 setKDiff:0.5];
 	[triangle2 setCRefl:0.2];
 	//[scene addObject:triangle2];
-	
+#endif
+
+#if TRUE
+    const int N=3;
+    const float radius=0.5;
+    const float PHI=(1.0+sqrtf(5))/2.0;
+    float4 center;
+    float ds=2.0*PHI*radius;
+    
+    for(int k=0;k<N;k++)
+        for(int j=0;j<N;j++)
+            for(int i=0;i<N;i++) {
+                Sphere *sphere=[[Sphere alloc] init];
+                center.x=((float)i-(float)(N-1)/2.0)*ds;
+                center.y=((float)j-(float)(N-1)/2.0)*ds;
+                center.z=(k+N)*ds;
+                
+                [sphere setCenter:center];
+                [sphere setRadius:radius];
+                [sphere setKDiff:0.9];
+                
+                [scene addObject:sphere];
+            }
+#endif
+    
 	Raytrace *raytrace=[[Raytrace alloc] init];
-    //[raytrace setBackgroundColor:[NSColor clearColor]];
+    [raytrace setBackgroundColor:[NSColor clearColor]];
 	
     [raytrace setWidth:512 setHeight:512 setOversampling:1];
 	//[raytrace setWidth:1280 setHeight:720 setOversampling:2];
@@ -102,10 +128,10 @@ int main (int argc, const char * argv[]) {
 	[light1 release];
 	[light2 release];
 	//[camera release];
-	[sphere1 release];
-	[sphere2 release];
-	[triangle1 release];
-	[triangle2 release];
+//	[sphere1 release];
+//	[sphere2 release];
+//	[triangle1 release];
+//	[triangle2 release];
 	[raytrace release];
     [pool drain];
     return 0;

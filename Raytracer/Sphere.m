@@ -25,7 +25,7 @@
 	float c=dot(tvec,tvec)-radius*radius;
 	float discr=b*b-4*a*c;
 	
-	/* if discrimant is negative, he ray has missed the sphere */
+	/* If discrimant is negative, the ray has missed the sphere. */
 	if(discr<0.0f) return -1.0f;
 
 	float sqrt_discr=sqrtf(discr);
