@@ -90,7 +90,7 @@ int main (int argc, const char * argv[]) {
 #endif
 
 #if TRUE
-    const int N=3;
+    const int N=2;
     const float radius=0.5;
     const float PHI=(1.0+sqrtf(5))/2.0;
     float4 center;
@@ -104,9 +104,13 @@ int main (int argc, const char * argv[]) {
                 center.y=((float)j-(float)(N-1)/2.0)*ds;
                 center.z=(k+N)*ds;
                 
+                [sphere setColor:[NSColor colorWithCalibratedRed:(float)i/(float)N green:(float)j/(float)N blue:(float)k/(float)N alpha:1.0]];
                 [sphere setCenter:center];
                 [sphere setRadius:radius];
-                [sphere setKDiff:0.9];
+                [sphere setKDiff:0.5];
+                [sphere setKSpec:0.4];
+                [sphere setAlpha:50];	
+                [sphere setCRefl:0.2];
                 
                 [scene addObject:sphere];
             }
@@ -115,8 +119,8 @@ int main (int argc, const char * argv[]) {
 	Raytrace *raytrace=[[Raytrace alloc] init];
     [raytrace setBackgroundColor:[NSColor clearColor]];
 	
-    [raytrace setWidth:512 setHeight:512 setOversampling:1];
-	//[raytrace setWidth:1280 setHeight:720 setOversampling:2];
+    //[raytrace setWidth:512 setHeight:512 setOversampling:1];
+	[raytrace setWidth:1280 setHeight:720 setOversampling:4];
 	
     [raytrace setScene:scene setLights:lights setCamera:camera];
 	

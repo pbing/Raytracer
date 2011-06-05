@@ -96,7 +96,7 @@
 //                  [ray setOrigin:5.0f*origin];
 //                  [ray setDirection:(float4){0.0,0.0,1.0,0.0}];
                     
-                    NSColor *sampleColor=[self trace:ray];
+                    NSColor *sampleColor=[self trace:ray depth:MAX_RAYTRACE_RECURSION_DEPTH];
                     
                     color[0]+=scale*[sampleColor redComponent];
                     color[1]+=scale*[sampleColor greenComponent];
@@ -114,7 +114,9 @@
 }
 
 /* get color of the body with the nearest intersection */
-- (NSColor*)trace:(Ray*)ray {
+- (NSColor*)trace:(Ray*)ray depth:(int)depth {
+    recursionDepth=depth;
+
 	/* intersection test of all bodies */
 	Body *nearest_body=nil;
 	float nearest_t=MAXFLOAT;
@@ -126,10 +128,16 @@
             nearest_body=body;
         }
     }	
-    /* use color of nearest interception point */
-    if(nearest_body!=nil)
-        return [self shade:ray body:nearest_body distanceToIntersection:nearest_t];
-    else
+    /* FIXME: also valid for refraction?
+     * Use color of nearest interception point.
+     * Background color is not an ambient color but only virtuell,
+     * be sure not to return it during recursion.
+     */
+	if(nearest_body!=nil)
+		return [self shade:ray body:nearest_body distanceToIntersection:nearest_t];
+    else if(recursionDepth<MAX_RAYTRACE_RECURSION_DEPTH)
+        return [[NSColor clearColor] colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
+	else 
         return backgroundColor;
 }
 
@@ -167,18 +175,34 @@
             float lightGreenComponent=[lightColor greenComponent];
             float lightBlueComponent=[lightColor blueComponent];
             
-            /* diffuse reflection */            
+            /* diffuse shading */            
             float LdotN=dot(L,N);
-            float kdiff=kd*fmaxf(0.0,LdotN);
+            float kdiff=kd*fmaxf(0.0f,LdotN);
             red+=kdiff*bodyRedComponent*lightRedComponent;
             green+=kdiff*bodyGreenComponent*lightGreenComponent;
             blue+=kdiff*bodyBlueComponent*lightBlueComponent;
             
+            /* specular shading (Blinn-Phong) */
+            float4 H=normalize(L+V);
+            float kspec=ks*powf(fmaxf(0.0f,dot(N,H)),alpha);
+            red+=kspec*lightRedComponent;
+            green+=kspec*lightGreenComponent;
+            blue+=kspec*lightBlueComponent;
+            
         }
         
-        
-        /* TODO for each reflected ray... */
-        /* TODO for each refracted ray... */
+        if(recursionDepth>1) {
+            /* for each reflected ray */
+            float cr=[body cRefl];
+            float4 R=2*dot(V,N)*N-V;
+            Ray *reflRay=[[Ray alloc] initWithOrigin:intersection direction:R]; 
+            NSColor *reflColor=[self trace:reflRay depth:recursionDepth-1];
+            red=(1.0-cr)*red+cr*[reflColor redComponent];
+            green=(1.0-cr)*green+cr*[reflColor greenComponent];
+            blue=(1.0-cr)*blue+cr*[reflColor blueComponent];
+            
+            /* TODO for each refracted ray... */
+        }
     }
     NSColor *radiance=[NSColor colorWithCalibratedRed:red green:green blue:blue alpha:1.0];
     return radiance;

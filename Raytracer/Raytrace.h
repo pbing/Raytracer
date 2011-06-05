@@ -14,7 +14,7 @@
 #import "Sphere.h"
 #import "Triangle.h"
 
-#define MAX_RAYTRACE_RECURSION 8
+#define MAX_RAYTRACE_RECURSION_DEPTH 8
 
 @interface Raytrace : NSObject {
 	int width;
@@ -27,7 +27,10 @@
 
 	NSBitmapImageRep *bitmap;
 	NSColor *backgroundColor;
+    
+    int recursionDepth;
 }
+
 - (NSBitmapImageRep*)bitmap;
 
 - (void)setWidth:(int)aWidth setHeight:(int)aHeight setOversampling:(int)aOversampling;
@@ -36,7 +39,7 @@
 - (void)setBackgroundColor:(NSColor*)bgColor;
 
 - (NSBitmapImageRep *)raytrace;
-- (NSColor*)trace:(Ray*)ray;
+- (NSColor*)trace:(Ray*)ray depth:(int)depth;
 - (NSColor*)shade:(Ray*)ray body:(Body*)body distanceToIntersection:(float)distance;
 - (BOOL)occluded:(Ray*)ray distanceToLight:(float)distance;
 @end
