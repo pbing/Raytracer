@@ -122,6 +122,7 @@ int main (int argc, const char * argv[]) {
                 [sphere setCRefl:0.2];
                 
                 [scene addObject:sphere];
+                [sphere release];
             }
 #endif
     

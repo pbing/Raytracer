@@ -64,6 +64,7 @@
 	float offsPixel=-0.5*((float)(oversampling-1.0)/(float)oversampling);
 	float xx,yy;
 	float scale=1.0/((float)oversampling*(float)oversampling);
+    NSColor *sampleColor,*sRGBColor;
 	
 	for(int y=0;y<height;y++) {
 		for(int x=0;x<width;x++) {
@@ -96,7 +97,7 @@
 //                  [ray setOrigin:5.0f*origin];
 //                  [ray setDirection:(float4){0.0,0.0,1.0,0.0}];
                     
-                    NSColor *sampleColor=[self trace:ray depth:MAX_RAYTRACE_RECURSION_DEPTH];
+                    sampleColor=[self trace:ray depth:MAX_RAYTRACE_RECURSION_DEPTH];
                     
                     color[0]+=scale*[sampleColor redComponent];
                     color[1]+=scale*[sampleColor greenComponent];
@@ -104,7 +105,7 @@
 				}
 			}
             
-			NSColor *sRGBColor=[[NSColor colorWithCalibratedRed:color[0] green:color[1] blue:color[2] alpha:1.0] sRGBColor];
+			sRGBColor=[[NSColor colorWithCalibratedRed:color[0] green:color[1] blue:color[2] alpha:1.0] sRGBColor];
 			[bitmap setColor:sRGBColor atX:x y:(height-y-1)];
 		}
 	}
@@ -188,12 +189,12 @@
             /* specular shading (Blinn-Phong) */
             float4 H=normalize(L+V);
             float kspec=normalizeFactor*ks*powf(fmaxf(0.0f,dot(N,H)),alpha);
-//            float kspec=ks*powf(fmaxf(0.0f,dot(N,H)),alpha);
             red+=kspec*(1.0f+beta*(bodyRedComponent-1.0f))*lightRedComponent;
             green+=kspec*(1.0f+beta*(bodyGreenComponent-1.0f))*lightGreenComponent;
             blue+=kspec*(1.0f+beta*(bodyBlueComponent-1.0f))*lightBlueComponent;
             
         }
+        [lightRay release];
         
         if(recursionDepth>1) {
             /* for each reflected ray */
@@ -204,10 +205,13 @@
             red=(1.0-cRefl)*red+cRefl*[reflColor redComponent];
             green=(1.0-cRefl)*green+cRefl*[reflColor greenComponent];
             blue=(1.0-cRefl)*blue+cRefl*[reflColor blueComponent];
+            [reflRay release];
             
             /* TODO for each refracted ray... */
         }
+
     }
+    
     NSColor *radiance=[NSColor colorWithCalibratedRed:red green:green blue:blue alpha:1.0];
     return radiance;
 }
