@@ -64,11 +64,10 @@
 	float offsPixel=-0.5*((float)(oversampling-1.0)/(float)oversampling);
 	float xx,yy;
 	float scale=1.0/((float)oversampling*(float)oversampling);
-    NSColor *sampleColor,*sRGBColor;
 	
-	for(int y=0;y<height;y++) {
+    for(int y=0;y<height;y++) {
 		for(int x=0;x<width;x++) {
-			float color[3]={0.0,0.0,0.0};
+			float4 color={0.0,0.0,0.0,0.0};
 			for(int i=0;i<oversampling;i++) {
 				yy=y+i*deltaPixel+offsPixel;
 				for(int j=0;j<oversampling;j++) {
@@ -97,15 +96,12 @@
 //                  [ray setOrigin:5.0f*origin];
 //                  [ray setDirection:(float4){0.0,0.0,1.0,0.0}];
                     
-                    sampleColor=[self trace:ray depth:MAX_RAYTRACE_RECURSION_DEPTH];
-                    
-                    color[0]+=scale*[sampleColor redComponent];
-                    color[1]+=scale*[sampleColor greenComponent];
-                    color[2]+=scale*[sampleColor blueComponent];
+                    float4 sampleColor=[self trace:ray depth:MAX_RAYTRACE_RECURSION_DEPTH];
+                    color+=scale*sampleColor;
 				}
 			}
             
-			sRGBColor=[[NSColor colorWithCalibratedRed:color[0] green:color[1] blue:color[2] alpha:1.0] sRGBColor];
+			NSColor *sRGBColor=[[NSColor colorWithCalibratedRed:color[0] green:color[1] blue:color[2] alpha:1.0] sRGBColor];
 			[bitmap setColor:sRGBColor atX:x y:(height-y-1)];
 		}
 	}
@@ -115,7 +111,7 @@
 }
 
 /* get color of the body with the nearest intersection */
-- (NSColor*)trace:(Ray*)ray depth:(int)depth {
+- (float4)trace:(Ray*)ray depth:(int)depth {
     recursionDepth=depth;
 
 	/* intersection test of all bodies */
@@ -137,12 +133,17 @@
 	if(nearest_body!=nil)
 		return [self shade:ray body:nearest_body distanceToIntersection:nearest_t];
     else if(recursionDepth<MAX_RAYTRACE_RECURSION_DEPTH)
-        return [[NSColor clearColor] colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
-	else 
-        return backgroundColor;
+        return (float4){0.0,0.0,0.0,0.0};
+	else {
+        float4 bgColor;
+        bgColor[0]=[backgroundColor redComponent];
+        bgColor[1]=[backgroundColor greenComponent];
+        bgColor[2]=[backgroundColor blueComponent];
+        return bgColor;
+    }
 }
 
-- (NSColor*)shade:(Ray*)ray body:(Body*)body distanceToIntersection:(float)distance {
+- (float4)shade:(Ray*)ray body:(Body*)body distanceToIntersection:(float)distance {
     /* material properties */
 	float kd=[body kDiff];
 	float ks=[body kSpec];
@@ -152,15 +153,14 @@
 	float ka=1.0f-kd-ks;
     float normalizeFactor=(alpha+8.0)/(8.0*M_PI); // Phong:(n+2)/2π, Blinn-Phong:(n+8)/8π
     
-	NSColor *bodyColor=[body color];
-	float bodyRedComponent=[bodyColor redComponent];
-	float bodyGreenComponent=[bodyColor greenComponent];
-	float bodyBlueComponent=[bodyColor blueComponent];
+	NSColor *nsBodyColor=[body color];
+    float4 bodyColor;
+	bodyColor[0]=[nsBodyColor redComponent];
+	bodyColor[1]=[nsBodyColor greenComponent];
+	bodyColor[2]=[nsBodyColor blueComponent];
 	
 	/* ambient shading */
-	float red=ka*bodyRedComponent;
-	float green=ka*bodyGreenComponent;
-	float blue=ka*bodyBlueComponent;
+    float4 radianceColor=ka*bodyColor;
     
 	/* for each light source */
  	float4 intersection=[ray pointOnRay:distance];
@@ -174,25 +174,21 @@
         Ray *lightRay=[[Ray alloc] initWithOrigin:intersection direction:L];
         
         if(![self occluded:lightRay distanceToLight:norm(lightVector)]) {
-            NSColor *lightColor=[light color];
-            float lightRedComponent=[lightColor redComponent];
-            float lightGreenComponent=[lightColor greenComponent];
-            float lightBlueComponent=[lightColor blueComponent];
-            
+            NSColor *nsLightColor=[light color];
+            float4 lightColor;
+            lightColor[0]=[nsLightColor redComponent];
+            lightColor[1]=[nsLightColor greenComponent];
+            lightColor[2]=[nsLightColor blueComponent];
+             
             /* diffuse shading */            
             float LdotN=dot(L,N);
             float kdiff=kd*fmaxf(0.0f,LdotN);
-            red+=kdiff*bodyRedComponent*lightRedComponent;
-            green+=kdiff*bodyGreenComponent*lightGreenComponent;
-            blue+=kdiff*bodyBlueComponent*lightBlueComponent;
+            radianceColor+=kdiff*bodyColor*lightColor;
             
             /* specular shading (Blinn-Phong) */
             float4 H=normalize(L+V);
             float kspec=normalizeFactor*ks*powf(fmaxf(0.0f,dot(N,H)),alpha);
-            red+=kspec*(1.0f+beta*(bodyRedComponent-1.0f))*lightRedComponent;
-            green+=kspec*(1.0f+beta*(bodyGreenComponent-1.0f))*lightGreenComponent;
-            blue+=kspec*(1.0f+beta*(bodyBlueComponent-1.0f))*lightBlueComponent;
-            
+            radianceColor+=kspec*(1.0f+beta*(bodyColor-1.0f))*lightColor;            
         }
         [lightRay release];
         
@@ -201,19 +197,16 @@
             float cRefl=[body cRefl];
             float4 R=2*dot(V,N)*N-V;
             Ray *reflRay=[[Ray alloc] initWithOrigin:intersection direction:R]; 
-            NSColor *reflColor=[self trace:reflRay depth:recursionDepth-1];
-            red=(1.0-cRefl)*red+cRefl*[reflColor redComponent];
-            green=(1.0-cRefl)*green+cRefl*[reflColor greenComponent];
-            blue=(1.0-cRefl)*blue+cRefl*[reflColor blueComponent];
+            float4 reflColor=[self trace:reflRay depth:recursionDepth-1];
+            
+            radianceColor=(1.0f-cRefl)*radianceColor+cRefl*reflColor;
             [reflRay release];
             
             /* TODO for each refracted ray... */
         }
 
     }
-    
-    NSColor *radiance=[NSColor colorWithCalibratedRed:red green:green blue:blue alpha:1.0];
-    return radiance;
+    return radianceColor;
 }
 
 - (BOOL)occluded:(Ray*)ray distanceToLight:(float)distance {
