@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		731C173B13A397B4000E4052 /* SphereCube.m in Sources */ = {isa = PBXBuildFile; fileRef = 731C173A13A397B4000E4052 /* SphereCube.m */; };
+		731C173E13A39BFD000E4052 /* Demo1.m in Sources */ = {isa = PBXBuildFile; fileRef = 731C173D13A39BFD000E4052 /* Demo1.m */; };
 		7361862B1397E12200F8DD64 /* float4.c in Sources */ = {isa = PBXBuildFile; fileRef = 736186291397E12100F8DD64 /* float4.c */; };
 		7387A1F01397959A0038A5CC /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7387A1EF1397959A0038A5CC /* AppKit.framework */; };
 		7387A1F6139796F00038A5CC /* Body.m in Sources */ = {isa = PBXBuildFile; fileRef = 7387A1F3139796F00038A5CC /* Body.m */; };
@@ -32,6 +34,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		731C173A13A397B4000E4052 /* SphereCube.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SphereCube.m; sourceTree = "<group>"; };
+		731C173C13A39AFB000E4052 /* Scenes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scenes.h; sourceTree = "<group>"; };
+		731C173D13A39BFD000E4052 /* Demo1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Demo1.m; sourceTree = "<group>"; };
 		736186291397E12100F8DD64 /* float4.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = float4.c; sourceTree = "<group>"; };
 		7361862A1397E12100F8DD64 /* float4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = float4.h; sourceTree = "<group>"; };
 		7387A1DA1397954F0038A5CC /* Raytracer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Raytracer; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -68,6 +73,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		731C173813A39782000E4052 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				731C173C13A39AFB000E4052 /* Scenes.h */,
+				731C173A13A397B4000E4052 /* SphereCube.m */,
+				731C173D13A39BFD000E4052 /* Demo1.m */,
+			);
+			name = Scenes;
+			sourceTree = "<group>";
+		};
 		7387A1CF1397954F0038A5CC = {
 			isa = PBXGroup;
 			children = (
@@ -97,6 +112,7 @@
 		7387A1E01397954F0038A5CC /* Raytracer */ = {
 			isa = PBXGroup;
 			children = (
+				731C173813A39782000E4052 /* Scenes */,
 				7387A20B13979C3D0038A5CC /* Basic */,
 				7387A20A13979C290038A5CC /* Lights */,
 				7387A20913979C050038A5CC /* Objects */,
@@ -208,6 +224,8 @@
 				7387A206139797090038A5CC /* Triangle.m in Sources */,
 				7387A208139797340038A5CC /* main.m in Sources */,
 				7361862B1397E12200F8DD64 /* float4.c in Sources */,
+				731C173B13A397B4000E4052 /* SphereCube.m in Sources */,
+				731C173E13A39BFD000E4052 /* Demo1.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
