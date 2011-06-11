@@ -9,7 +9,7 @@
 #import "RayColor.h"
 
 /* sRGB gamma correction. */
-float sRGBGamma(float color) {
+static inline float sRGBGamma(float color) {
 	if(color>0.0031308f)
 		return 1.055f*powf(color,1.0f/2.4f)-0.055f;
 	else
