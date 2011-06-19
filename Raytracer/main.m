@@ -1,6 +1,7 @@
 #import <AppKit/AppKit.h>
 #import "Raytrace.h"
 #import "Scenes.h"
+#import "Grid3D.h"
 
 int main (int argc, const char * argv[]) {
     NSAutoreleasePool *pool=[[NSAutoreleasePool alloc] init];
@@ -17,7 +18,7 @@ int main (int argc, const char * argv[]) {
     
 //	Demo1(scene,lights);
     SphereCube(scene,lights,3);
-    
+
 	Raytrace *raytrace=[[Raytrace alloc] init];
     [raytrace setBackgroundColor:[NSColor clearColor]];
 	

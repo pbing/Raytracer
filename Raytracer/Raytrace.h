@@ -39,6 +39,7 @@
 - (void)setBackgroundColor:(NSColor*)bgColor;
 
 - (NSBitmapImageRep *)raytrace;
+- (void)traceRect:(NSRect)rect;
 - (float4)trace:(Ray*)ray depth:(int)depth;
 - (float4)shade:(Ray*)ray body:(Body*)body distanceToIntersection:(float)distance;
 - (BOOL)occluded:(Ray*)ray distanceToLight:(float)distance;

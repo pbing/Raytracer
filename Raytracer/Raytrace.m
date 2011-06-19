@@ -42,12 +42,6 @@
 }
 
 - (NSBitmapImageRep *)raytrace {
-	/* FIXME ray */
-	Ray *ray=[[Ray alloc] init];
-	float4 origin={0.0,0.0,0.0,0.0};
-	float4 direction;
-	[ray setOrigin:origin];
- 	
 	bitmap=[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
                                                    pixelsWide:width
                                                    pixelsHigh:height
@@ -59,14 +53,42 @@
                                                   bytesPerRow:0
                                                  bitsPerPixel:0];
     
-	/* antialiasing with box filter */
+#if TRUE
+    dispatch_queue_t dp_queue=dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0);
+    dispatch_group_t dp_group=dispatch_group_create();
+    
+    const int n=16,nx=round(sqrtf(n)),ny=n/nx; // max. 16 CPU cores
+    float dx=(float)width/(float)nx;
+    float dy=(float)height/(float)ny;
+    for(int i=0;i<ny;i++)
+        for(int j=0;j<nx;j++)
+            dispatch_group_async(dp_group,dp_queue,^{[self traceRect:NSMakeRect(j*dx,i*dy,dx,dy)];});
+    
+    dispatch_group_wait(dp_group,DISPATCH_TIME_FOREVER);
+    dispatch_release(dp_group);
+#else
+    [self raytraceWithRect:NSMakeRect(0.0,0.0,width,height)];
+#endif
+    
+	[bitmap autorelease];
+	return bitmap;
+}
+
+- (void)traceRect:(NSRect)rect {
+  	/* FIXME ray */
+	Ray *ray=[[Ray alloc] init];
+	float4 origin={0.0,0.0,-10.0,0.0};
+	float4 direction={0.0,0.0,0.0,0.0};
+	[ray setOrigin:origin];
+ 	
+  	/* antialiasing with box filter */
 	float deltaPixel=(1.0/(float)oversampling);
 	float offsPixel=-0.5*((float)(oversampling-1.0)/(float)oversampling);
 	float xx,yy;
 	float scale=1.0/((float)oversampling*(float)oversampling);
 	
-    for(int y=0;y<height;y++) {
-		for(int x=0;x<width;x++) {
+    for(int y=NSMinY(rect);y<NSMaxY(rect);y++) {
+		for(int x=NSMinX(rect);x<NSMaxX(rect);x++) {
 			float4 color={0.0,0.0,0.0,0.0};
 			for(int i=0;i<oversampling;i++) {
 				yy=y+i*deltaPixel+offsPixel;
@@ -74,27 +96,31 @@
 					xx=x+j*deltaPixel+offsPixel;
 					
                     /* pin hole camera with distorsion of objects in the corners */
-//					direction.x=((float)xx/(float)(height))-0.5*(float)width/(float)height;
-//					direction.y=((float)yy/(float)(height))-0.5;
-//					direction.z=1.0;
-//					[ray setDirection:normalize(direction)];
-					
-                    /* perspective projection with barrel distorsions for large p.o.v. */
-					float xt=((float)xx/(float)(height))-0.5*(float)width/(float)height;
-					float yt=((float)yy/(float)(height))-0.5;
-                    float zt=1.0f;
-					float s=norm((float4){xt,yt,zt,0.0});
-                    direction.x=xt*s;
-                    direction.y=yt*s;
-                    direction.z=zt;
+					direction.x=((float)xx/(float)(height))-0.5*(float)width/(float)height;
+					direction.y=((float)yy/(float)(height))-0.5;
+					direction.z=1.0;
 					[ray setDirection:normalize(direction)];
 					
-//					/* orthographic projection */
-//					origin.x=((float)xx/(float)(height))-0.5*(float)width/(float)height;
-//					origin.y=((float)yy/(float)(height))-0.5;
-//                  origin.z=0.0;
-//                  [ray setOrigin:5.0f*origin];
-//                  [ray setDirection:(float4){0.0,0.0,1.0,0.0}];
+                    //                    /* perspective projection with barrel distorsions for large p.o.v. */
+                    //					float xt=((float)xx/(float)(height))-0.5*(float)width/(float)height;
+                    //					float yt=((float)yy/(float)(height))-0.5;
+                    //                    float zt=1.0f;
+                    //					float s=norm((float4){xt,yt,zt,0.0});
+                    //                    direction.x=xt*s;
+                    //                    direction.y=yt*s;
+                    //                    direction.z=zt;
+                    //					[ray setDirection:normalize(direction)];
+					
+                    //					/* orthographic projection */
+                    //					origin.x=((float)xx/(float)(height))-0.5*(float)width/(float)height;
+                    //					origin.y=((float)yy/(float)(height))-0.5;
+                    //                    origin.z=0.0;
+                    //                    direction.x=0.0;
+                    //                    direction.y=0.0;
+                    //                    direction.z=1.0;
+                    //                    [ray setOrigin:5.0f*origin];
+                    //                    [ray setDirection:normalize(direction)];
+                    
                     
                     float4 sampleColor=[self trace:ray depth:MAX_RAYTRACE_RECURSION_DEPTH];
                     color+=scale*sampleColor;
@@ -106,8 +132,6 @@
 		}
 	}
 	[ray release];
-	[bitmap autorelease];
-	return bitmap;
 }
 
 /* get color of the body with the nearest intersection */

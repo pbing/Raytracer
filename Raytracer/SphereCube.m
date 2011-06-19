@@ -32,7 +32,8 @@ void SphereCube(NSMutableArray *scene,NSMutableArray *lights,int N) {
                 Sphere *sphere=[[Sphere alloc] init];
                 center.x=((float)i-(float)(N-1)/2.0)*ds;
                 center.y=((float)j-(float)(N-1)/2.0)*ds;
-                center.z=(k+N)*ds;
+                center.z=((float)k-(float)(N-1)/2.0)*ds;
+//                center.z=(k+N)*ds;
                 
                 [sphere setColor:[NSColor colorWithCalibratedRed:(float)i/(float)(N-1) green:(float)j/(float)(N-1) blue:(float)k/(float)(N-1) alpha:1.0]];
                 [sphere setCenter:center];
