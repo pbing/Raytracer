@@ -53,23 +53,17 @@
                                                   bytesPerRow:0
                                                  bitsPerPixel:0];
     
-#if TRUE
-    dispatch_queue_t dp_queue=dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0);
-    dispatch_group_t dp_group=dispatch_group_create();
-    
-    const int n=16,nx=round(sqrtf(n)),ny=n/nx; // max. 16 CPU cores
+    const int n=16,nx=roundf(sqrtf(n)),ny=n/nx; // max. 16 CPU cores
     float dx=(float)width/(float)nx;
     float dy=(float)height/(float)ny;
+    dispatch_queue_t dp_queue=dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0);
+    dispatch_group_t dp_group=dispatch_group_create();
     for(int i=0;i<ny;i++)
         for(int j=0;j<nx;j++)
             dispatch_group_async(dp_group,dp_queue,^{[self traceRect:NSMakeRect(j*dx,i*dy,dx,dy)];});
-    
     dispatch_group_wait(dp_group,DISPATCH_TIME_FOREVER);
-    dispatch_release(dp_group);
-#else
-    [self raytraceWithRect:NSMakeRect(0.0,0.0,width,height)];
-#endif
-    
+
+    dispatch_release(dp_group);   
 	[bitmap autorelease];
 	return bitmap;
 }
@@ -127,7 +121,7 @@
 				}
 			}
             
-			NSColor *sRGBColor=[[NSColor colorWithCalibratedRed:color[0] green:color[1] blue:color[2] alpha:1.0] sRGBColor];
+			NSColor *sRGBColor=[NSColor colorWithSRGBRed:color[0] green:color[1] blue:color[2] alpha:1.0];
 			[bitmap setColor:sRGBColor atX:x y:(height-y-1)];
 		}
 	}

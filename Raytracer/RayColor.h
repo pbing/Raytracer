@@ -11,7 +11,7 @@
 
 @interface NSColor (RayColor)
 
-- (NSColor*) sRGBColor;
++ (NSColor*)colorWithSRGBRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha;
 
 - (NSColor*) addColor:(NSColor*)color;
 - (NSColor*) addColor:(NSColor*)color1 color:(NSColor*)color2;

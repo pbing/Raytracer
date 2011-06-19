@@ -19,11 +19,8 @@ static inline float sRGBGamma(float color) {
 
 @implementation NSColor (RayColor)
 
-- (NSColor*) sRGBColor {
-	return [NSColor colorWithCalibratedRed:sRGBGamma([self redComponent])
-									 green:sRGBGamma([self greenComponent])
-									  blue:sRGBGamma([self blueComponent])
-									 alpha:1.0];
++ (NSColor*)colorWithSRGBRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha {
+	return [NSColor colorWithCalibratedRed:sRGBGamma(red) green:sRGBGamma(green) blue:sRGBGamma(blue) alpha:1.0];
 }
 
 - (NSColor*) addColor:(NSColor*)color {
