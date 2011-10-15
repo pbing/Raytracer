@@ -12,7 +12,7 @@
 @implementation Light
 
 -(id) init {
-	[super init];
+	self=[super init];
 	
 	[self setLocation:(float4){0.0,0.0,0.0,0.0}];
 	[self setColor:[NSColor whiteColor]];

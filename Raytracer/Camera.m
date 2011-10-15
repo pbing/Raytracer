@@ -14,7 +14,7 @@
 @synthesize location,direction,up,right,sky,lookAt,angle;
 
 - (id)init {
-    [super init];
+    self=[super init];
     
     location =(float4){0.0,0.0,0.0,0.0};
     right    =(float4){1.0,0.0,0.0,0.0};

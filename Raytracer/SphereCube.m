@@ -12,19 +12,16 @@ void SphereCube(NSMutableArray *scene,NSMutableArray *lights,int N) {
 	Light *light1=[[Light alloc] init];
 	[light1 setLocation:(float4){10.0,10.0,0.0,0.0}];
 	[lights addObject:light1];
-    [light1 release];
     
 	Light *light2=[[Light alloc] init];
 	[light2 setLocation:(float4){-17.3,5.8,0.0,0.0}];
 	[light2 setColor:[NSColor colorWithCalibratedRed:0.3 green:0.3 blue:0.3 alpha:1.0]]; 
 	[lights addObject:light2];
-    [light2 release];
     
 	Light *light3=[[Light alloc] init];
 	[light3 setLocation:(float4){0.0,0.0,20.0,0.0}];
 	[light3 setColor:[NSColor colorWithCalibratedRed:0.5 green:0.5 blue:0.5 alpha:1.0]]; 
 	[lights addObject:light3];
-    [light3 release];
 
     for(int k=0;k<N;k++)
         for(int j=0;j<N;j++)
@@ -45,6 +42,5 @@ void SphereCube(NSMutableArray *scene,NSMutableArray *lights,int N) {
                 [sphere setCRefl:0.2];
                 
                 [scene addObject:sphere];
-                [sphere release];
             }
 }

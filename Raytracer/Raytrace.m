@@ -13,7 +13,7 @@
 -(NSBitmapImageRep*)bitmap {return bitmap;}
 
 - (id)init {
-	[super init];
+	self=[super init];
 	
 	/* default: dark gray background */
 	backgroundColor=[[NSColor darkGrayColor] colorUsingColorSpaceName:NSCalibratedRGBColorSpace];
@@ -64,7 +64,6 @@
     dispatch_group_wait(dp_group,DISPATCH_TIME_FOREVER);
 
     dispatch_release(dp_group);   
-	[bitmap autorelease];
 	return bitmap;
 }
 
@@ -125,7 +124,6 @@
 			[bitmap setColor:sRGBColor atX:x y:(height-y-1)];
 		}
 	}
-	[ray release];
 }
 
 /* get color of the body with the nearest intersection */
@@ -208,7 +206,6 @@
             float kspec=normalizeFactor*ks*powf(fmaxf(0.0f,dot(N,H)),alpha);
             radianceColor+=kspec*(1.0f+beta*(bodyColor-1.0f))*lightColor;            
         }
-        [lightRay release];
         
         if(recursionDepth>1) {
             /* for each reflected ray */
@@ -218,7 +215,6 @@
             float4 reflColor=[self trace:reflRay depth:recursionDepth-1];
             
             radianceColor=(1.0f-cRefl)*radianceColor+cRefl*reflColor;
-            [reflRay release];
             
             /* TODO for each refracted ray... */
         }

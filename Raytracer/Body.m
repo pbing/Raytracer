@@ -14,7 +14,7 @@
 @synthesize kDiff,kSpec,alpha,beta,cRefl;
 
 - (id) init {
-	[super init];
+	self=[super init];
 	
 	/* default: only ambient shading */
 	kDiff=0.0;

@@ -11,7 +11,7 @@
 @implementation Ray
 
 - (id)initWithOrigin:(float4)anOrigin direction:(float4)aDirection {
-    [super init];
+    self=[super init];
     
     origin=anOrigin;
     direction=aDirection;
