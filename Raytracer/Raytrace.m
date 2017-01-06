@@ -63,7 +63,6 @@
             dispatch_group_async(dp_group,dp_queue,^{[self traceRect:NSMakeRect(j*dx,i*dy,dx,dy)];});
     dispatch_group_wait(dp_group,DISPATCH_TIME_FOREVER);
 
-    dispatch_release(dp_group);   
 	return bitmap;
 }
 
@@ -120,7 +119,7 @@
 				}
 			}
             
-			NSColor *sRGBColor=[NSColor colorWithSRGBRed:color[0] green:color[1] blue:color[2] alpha:1.0];
+			NSColor *sRGBColor=[NSColor colorWithSRGBGammaRed:color[0] green:color[1] blue:color[2] alpha:1.0];
 			[bitmap setColor:sRGBColor atX:x y:(height-y-1)];
 		}
 	}

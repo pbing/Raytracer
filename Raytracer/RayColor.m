@@ -1,5 +1,5 @@
 //
-//  SRGBColor.m
+//  RayColor.m
 //  Raytracer
 //
 //  Created by Bernd Beuster on 29.05.11.
@@ -19,20 +19,8 @@ static inline float sRGBGamma(float color) {
 
 @implementation NSColor (RayColor)
 
-+ (NSColor*)colorWithSRGBRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha {
-	return [NSColor colorWithCalibratedRed:sRGBGamma(red) green:sRGBGamma(green) blue:sRGBGamma(blue) alpha:1.0];
-}
-
-- (NSColor*) addColor:(NSColor*)color {
-	return [self addColor:self color:color];
-}
-
-- (NSColor*) addColor:(NSColor*)color1 color:(NSColor*)color2 {
-	float   red=[color1   redComponent]+[color2  redComponent];
-	float green=[color1 greenComponent]+[color2 greenComponent];
-	float  blue=[color1  blueComponent]+[color2  blueComponent];
-	
-	return [NSColor colorWithCalibratedRed:red green:green blue:blue alpha:1.0];
++ (NSColor*)colorWithSRGBGammaRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha {
+	return [NSColor colorWithCalibratedRed:sRGBGamma(red) green:sRGBGamma(green) blue:sRGBGamma(blue) alpha:alpha];
 }
 
 @end

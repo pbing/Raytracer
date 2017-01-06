@@ -1,5 +1,5 @@
 //
-//  SRGBColor.h
+//  RayColor.h
 //  Raytracer
 //
 //  Created by Bernd Beuster on 29.05.11.
@@ -11,9 +11,6 @@
 
 @interface NSColor (RayColor)
 
-+ (NSColor*)colorWithSRGBRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha;
-
-- (NSColor*) addColor:(NSColor*)color;
-- (NSColor*) addColor:(NSColor*)color1 color:(NSColor*)color2;
++ (NSColor*)colorWithSRGBGammaRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue alpha:(CGFloat)alpha;
 
 @end
